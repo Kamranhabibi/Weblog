@@ -1,0 +1,49 @@
+{% extends 'weblog/include/base.html' %}
+{% load static %}
+{% block bace %}
+
+    {% block title %} Cantact Us {% endblock %}
+
+
+    <section class="contact-us">
+      <div class="container">
+        <div class="row">
+        
+          <div class="col-lg-12">
+            <div class="down-contact">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="sidebar-item contact-form">
+                    <div class="sidebar-heading">
+                      <h2>Edit</h2>
+                    <form id="contact" action="" method="post">{% csrf_token %}
+                        <div class="row">
+                          <div class="col-sm-12">
+                              
+                              <div class="form field-name">
+                                  
+                                  {{ form }}
+                              </div>
+                          </div>
+                            
+                          <div class="col-lg-12">
+                            <fieldset>
+                              <button type="submit" id="form-submit" class="main-button">Send Message</button>
+                            </fieldset>
+                          </div>
+                        </div>
+                      </form>
+                     
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+            
+        </div>
+      </div>
+    </section>
+
+   {% endblock %}

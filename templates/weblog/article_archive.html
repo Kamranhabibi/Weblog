@@ -1,0 +1,15 @@
+
+{% extends 'weblog/include/base.html' %}
+{% load static %}
+
+{% block bace %}
+    
+    {% block title %}   Article : Archive  {% endblock %}
+    
+<ul>
+{% for article in latest %}
+    <li>{{ article.update }}: {{ article.title }}</li>
+{% endfor %}
+</ul>    
+
+{% endblock %}

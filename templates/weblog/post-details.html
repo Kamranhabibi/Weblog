@@ -1,0 +1,208 @@
+{% extends 'weblog/include/base.html' %}
+{% load static %}
+{% block bace %}
+
+    {% block title %} {{ article.title }} {% endblock %}
+
+
+
+
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Post Details</h4>
+                            <h5><span style="color: whitesmoke">{{ now|date }} {{ now.time }}</span></h5>
+                            <h2>Single blog post</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="blog-post">
+                                    <div class="blog-thumb">
+
+                                        <img src="{{ article.image.url }}" alt="{{ article.title }}">
+                                    </div>
+                                    <div class="down-content">
+                                        {% for cate in article.category.all %}
+                                            <span>{{ cate.title }}</span>
+                                        {% empty %}
+                                            <span>No categories assigned</span>
+                                        {% endfor %}
+                                        <!-- revers tag --> <a href="{{ article.get_absolute_url }}">
+                                        <h4>{{ article.title }}</h4></a>
+                                        <!-- url tag -->
+                                        <!-- <a href="{% url 'weblog:detail' article.pk %}"><h4>{{ article.title }}s</h4></a> -->
+                                        <ul class="post-info">
+                                            <li><a href="#">{{ article.author.get_full_name }}</a></li>
+                                            <li><a href="#">{{ article.create }}</a></li>
+                                            <li><a href="#">10 Comments</a></li>
+                                        </ul>
+                                        <p>{{ article.body }}</p>
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <ul class="post-tags">
+                                                        {% if is_liked %}
+                                                            <li>
+                                                                <a onclick="like('{{ article.slug }}','{{ article.id }}')"><i
+                                                                        id="like" style="font-size: 30px"
+                                                                        class="fa fa-heart"></i></a><span id="cont">{{ article.likes.all.count }}</span>
+                                                            </li>
+                                                        {% else %}
+                                                            <li>
+                                                                <a onclick="like('{{ article.slug }}','{{ article.id }}')"><i
+                                                                        id="like" style="font-size: 30px"
+                                                                        class="fa fa-heart-o"></i></a><span id="cont">{{ article.likes.all.count }}</span>
+                                                            </li>
+                                                        {% endif %}
+
+                                                    </ul>
+                                                </div>
+                                                <div class="col-6">
+                                                    <ul class="post-share">
+                                                        <li><i class="fa fa-share-alt"></i></li>
+                                                        <li><a href="#">Facebook</a>,</li>
+                                                        <li><a href="#"> Twitter</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- comment -->
+
+                            <div class="col-lg-12">
+                                <div class="sidebar-item comments">
+                                    <div class="sidebar-heading">
+                                        <h2>4 comments</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for comment in article.comments.all %}
+                                                {% if comment.parent == None %}
+                                                    <li>
+                                                        <div class="author-thumb">
+                                                            {% if comment.user.profile.image %}
+                                                                <img src="{{ comment.user.profile.image.url }}" alt="">
+                                                            {% else %}
+                                                                <img src="{% static 'assets/images/comment-author-01.jpg' %}"
+                                                                     alt="">
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ comment.user.get_full_name }}<span>{{ comment.create }}</span>
+                                                            </h4>
+                                                            <p>{{ comment.body }}</p>
+                                                            <button onclick="set_value({{ comment.id }})"
+                                                                    class="btn btn-primary">Reply
+                                                            </button>
+                                                        </div>
+
+                                                    </li>
+                                                    {% for reply in comment.replies.all %}
+                                                        <li class="replied">
+                                                        <div class="author-thumb">
+
+                                                            {% if comment.user.profile.image %}
+                                                                <img src="{{ reply.user.profile.image.url }}" alt="">
+                                                            {% else %}
+                                                                <img src="{% static 'assets/images/comment-author-02.jpg' %}"
+                                                                     alt="">
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ reply.user.get_full_name }}<span>{{ reply.create }}</span>
+                                                            </h4>
+                                                            <p>{{ reply.body }}</p>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            </li>
+                                            <!-- static comments -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- contact_us -->
+
+                            <div class="col-lg-12">
+                                <div class="sidebar-item submit-comment">
+                                    <div class="sidebar-heading">
+                                        <h2>Your comment</h2>
+                                    </div>
+                                    {% if user.is_authenticated %}
+                                        <div class="content">
+                                            <form id="comment" action="#" method="post">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <input type="hidden" id="parent_id" name="parent_id" value="">
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <label for="comment"><textarea
+                                                                    name="body" rows="6"
+                                                                    id="body" placeholder="Type Your Comment"
+                                                                    required=""></textarea></label>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <button type="submit" id="form-submit" class="main-button">
+                                                                Submit
+                                                            </button>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <butten><a class="btn btn-danger" href="{% url 'auth:login' %}">Please Your
+                                            Login For Write Comment</a></butten>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'weblog/include/sidebar.html' %}
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'assets/js/ajax_used.js' %}"></script>
+
+    <script>
+        function set_value(id) {
+            document.getElementById('parent_id').value = id;
+            window.location.href = '#body'
+        }
+
+
+    </script>
+
+{% endblock %}

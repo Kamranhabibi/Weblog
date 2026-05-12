@@ -1,0 +1,42 @@
+{% extends 'weblog/include/base.html' %}
+{% load static %}
+{% block bace %}
+
+    {% block title %} List View {% endblock %}
+
+
+    <section class="contact-us">
+      <div class="container">
+        <div class="row">
+        
+          <div class="col-lg-12">
+            <div class="down-contact">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="sidebar-item contact-form">
+                    <div class="sidebar-heading">
+                      <h2>List View</h2>
+                        <hr>
+                        <hr>
+                    
+                    
+                      {% for l in list %}
+                      <div>
+                          <span class="field-name">{{ l.name }}</span>- <span class="btn btn-primary"><a style="color: whitesmoke" href="{% url 'weblog:edit' l.pk %}">edit</a></span> ---- <span class="btn btn-danger"><a
+                              href="{% url 'weblog:delete' l.pk %}">Delete</a></span>
+                          <hr>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+            
+        </div>
+      </div>
+    </section>
+
+   {% endblock %}

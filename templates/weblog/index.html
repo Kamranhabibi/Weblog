@@ -1,0 +1,38 @@
+{% extends 'weblog/include/base.html' %}
+{% load static %}
+{% block bace %}
+
+    {% block title %} Home {% endblock %}
+
+<!-- Page Content -->
+
+<!-- Banner Starts Here -->
+{% include 'weblog/include/banner.html' %}
+<!-- Banner Ends Here -->
+
+
+
+<section class="blog-posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        
+                      {% include 'weblog/include/post.html' %}
+                        
+                        <div class="col-lg-12">
+                            <div class="main-button">
+                                <a href="{% url 'weblog:blog' %}">View All Posts</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'weblog/include/sidebar.html' %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
